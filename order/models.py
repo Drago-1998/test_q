@@ -8,6 +8,7 @@ class Order(models.Model):
     price_usd = models.DecimalField(verbose_name='Сумма в долларах', max_digits=17, decimal_places=2)
     price_rub = models.DecimalField(verbose_name='Сумма в рублях', max_digits=17, decimal_places=2)
     delivery_time = models.DateField(verbose_name='Срок поставки')
+    delivery_massage = models.BooleanField(verbose_name='Оповещение о итечение срока', default=False)
 
     def __str__(self):
         return self.article

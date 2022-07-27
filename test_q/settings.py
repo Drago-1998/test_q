@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'test_q',
     'order',
 ]
 
@@ -78,10 +79,10 @@ WSGI_APPLICATION = 'test_q.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'test_db',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': '123',
-        'HOST': '127.0.0.1'
+        'PASSWORD': 'postgres',
+        'HOST': 'pg_db'
     }
 }
 
@@ -133,11 +134,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Celery settings #
 # # # # # # # # # #
 
-REDIS_HOST = '0.0.0.0'
+# REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', f'redis://redis:{REDIS_PORT}/0')
 CELERY_BROKER_TRANSPORT_OPTION = {'visibility_timeout': 3600}
-CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER', f'redis://redis:{REDIS_PORT}/0')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
