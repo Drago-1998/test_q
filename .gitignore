@@ -5,3 +5,6 @@ venv/
 __pycache__/
 .idea/
 media/
+staticfiles-cdn/
+celerybeat.pid
+celerybeat-schedule

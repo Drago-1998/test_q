@@ -17,9 +17,9 @@ def unpacking_data(imported_orders_data: dict):
         if _article in imported_orders_data.keys():
             _order_data = imported_orders_data[_article]
 
-            _order_object.article = _order_data['article'],
-            _order_object.price_usd = _order_data['price_usd'],
-            _order_object.price_rub = _order_data['price_rub'],
+            _order_object.article = _order_data['article']
+            _order_object.price_usd = _order_data['price_usd']
+            _order_object.price_rub = _order_data['price_rub']
             _order_object.delivery_time = _order_data['delivery_time']
 
             update_order_objects.append(_order_object)

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header pb-0 d-flex justify-content-center">
+                        <h2>Каналсервис</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="annotationchart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header pb-0 d-flex justify-content-between">
+                        <h3>Список заказов</h3>
+                        <h3>Сумма: {{ orders_total.sum }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Заказ №</th>
+                                    <th>Стоимост ($)</th>
+                                    <th>Стоимост (rub)</th>
+                                    <th>Срок поставки</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ order.article }}</td>
+                                        <td>{{ order.price_usd }}</td>
+                                        <td>{{ order.price_rub }}</td>
+                                        <td>{{ order.delivery_time|date:'d.m.Y' }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        series = {
+            "date":
+                [
+                    {% for order in orders %}
+                        "{{ order.delivery_time|date:'Y-m-d' }}",
+                    {% endfor %}
+                ],
+            "value":
+                [
+                    {% for order in orders %}
+                        {{ order.price_usd }},
+                    {% endfor %}
+                ]
+            }
+    </script>
+    <script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
+    <script src="{% static 'assets/js/chart/apex-chart/chart-custom.js' %}"></script>
+{% endblock %}

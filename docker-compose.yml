@@ -4,28 +4,29 @@ services:
   django:
     build: .
     container_name: django
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "rm -rf celerybeat.pid && python3 manage.py migrate --run-syncdb && python manage.py collectstatic --noinput && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/usr/src/test_q/
     ports:
       - "8000:8000"
     environment:
       - DEBUG=1
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 0.0.0.0
       - CELERY_BROCKER=redis://redis:6379/0
       - CELERY_BACKEND=redis://redis:6379/0
     depends_on:
-      - migration
       - pg_db
       - redis
-  migration:
+  flower:
     build: .
-    command: python manage.py migrate --noinput
+    command: celery -A test_q flower  --address=0.0.0.0 --port=3000
     volumes:
       - .:/usr/src/test_q/
+    ports:
+      - "3000:3000"
     depends_on:
-      - pg_db
-  celery:
+      - celery_worker
+      - django
+  celery_worker:
     build: .
     command: celery -A test_q worker -l INFO
     volumes:
@@ -33,6 +34,15 @@ services:
     depends_on:
       - django
       - redis
+  celery_beat:
+    build: .
+    command: celery -A test_q beat -l INFO
+    volumes:
+      - .:/usr/src/test_q/
+    depends_on:
+      - django
+      - redis
+      - celery_worker
   pg_db:
     image: postgres:10.1-alpine
     container_name: pg_db

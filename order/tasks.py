@@ -31,7 +31,7 @@ def import_data():
     imported_orders_data = {
         _order_data[1]: {
             'article': _order_data[1],
-            'price_usd': _order_data[2],
+            'price_usd': decimal.Decimal(_order_data[2]),
             'price_rub': decimal.Decimal(_order_data[2]) * currency,
             'delivery_time': datetime.datetime.strptime(_order_data[3], '%d.%m.%Y')
         }
