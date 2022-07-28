@@ -1453,7 +1453,7 @@ var options6 = {
         id: 'areachart-2',
     },
     dataLabels: {
-        enabled: true
+        enabled: false
     },
     stroke: {
         curve: 'straight'
