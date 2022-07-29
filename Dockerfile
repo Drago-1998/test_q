@@ -8,8 +8,3 @@ COPY ./req.txt /usr/src/req.txt
 RUN pip install -r /usr/src/req.txt
 
 COPY . /usr/src/test_q
-
-EXPOSE 8000
-CMD ['python', 'manage.py', 'migrate']
-CMD ['python', 'manage.py', 'runserver', '0.0.0.0:8000']
-CMD ['celery', '-A', 'test_q', 'worker', '-l', 'info']

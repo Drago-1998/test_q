@@ -14,4 +14,8 @@ app.conf.beat_schedule = {
         'task': 'order.tasks.import_data',
         'schedule': crontab()
     },
+    'update-currency-every-day': {
+        'task': 'order.tasks.update_currency',
+        'schedule': crontab(hour=8)
+    },
 }

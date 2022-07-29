@@ -76,10 +76,10 @@ WSGI_APPLICATION = 'test_q.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'pg_db'
+        'NAME': os.environ.get('POSTGRES_DB', f'test_db'),
+        'USER': os.environ.get('POSTGRES_USER', f'postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', f'123'),
+        'HOST': os.environ.get('POSTGRES_HOST', f'localhost')
     }
 }
 
@@ -130,15 +130,22 @@ STATIC_ROOT = BASE_DIR / "staticfiles-cdn"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# # # # # # # # #
+#  Bot settings #
+# # # # # # # # #
+
+BOT_TOKEN = os.environ.get('BOT_TOKEN', f'5576692388:AAHicyR-NiMy2JQFuInxqwEj4AZ5Igonw0U')
+TELEGRAM_USER_ID = os.environ.get('TELEGRAM_USER_ID', f'839292174')
+
 # # # # # # # # # #
 # Celery settings #
 # # # # # # # # # #
 
-# REDIS_HOST = 'localhost'
+REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', f'redis://redis:{REDIS_PORT}/0')
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', f'redis://{REDIS_HOST}:{REDIS_PORT}/0')
 CELERY_BROKER_TRANSPORT_OPTION = {'visibility_timeout': 3600}
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER', f'redis://redis:{REDIS_PORT}/0')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKEND', f'redis://{REDIS_HOST}:{REDIS_PORT}/0')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

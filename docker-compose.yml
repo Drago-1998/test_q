@@ -1,24 +1,25 @@
 version: "3.9"
 
+
 services:
   django:
-    build: .
+    image: test_q
     container_name: django
+    env_file:
+      - .env.dev
     command: bash -c "rm -rf celerybeat.pid && python3 manage.py migrate --run-syncdb && python manage.py collectstatic --noinput && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/usr/src/test_q/
     ports:
       - "8000:8000"
-    environment:
-      - DEBUG=1
-      - CELERY_BROCKER=redis://redis:6379/0
-      - CELERY_BACKEND=redis://redis:6379/0
     depends_on:
       - pg_db
       - redis
   flower:
-    build: .
+    image: test_q
     command: celery -A test_q flower  --address=0.0.0.0 --port=3000
+    env_file:
+      - .env.dev
     volumes:
       - .:/usr/src/test_q/
     ports:
@@ -27,16 +28,20 @@ services:
       - celery_worker
       - django
   celery_worker:
-    build: .
+    image: test_q
     command: celery -A test_q worker -l INFO
+    env_file:
+      - .env.dev
     volumes:
       - .:/usr/src/test_q/
     depends_on:
       - django
       - redis
   celery_beat:
-    build: .
+    image: test_q
     command: celery -A test_q beat -l INFO
+    env_file:
+      - .env.dev
     volumes:
       - .:/usr/src/test_q/
     depends_on:
