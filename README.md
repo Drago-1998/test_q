@@ -37,25 +37,5 @@
 Также обновляется и курс валюты каждий ден 8 утра
 
 Имеется front-end по адресу - [localhost:8000](https://localhost:8000)
+
 Имеется Flower для маниторинга задач [celery](https://docs.celeryq.dev/en/stable/index.html) по адресу - [localhost:3000](https://localhost:3000)
-
-```python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-```
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
